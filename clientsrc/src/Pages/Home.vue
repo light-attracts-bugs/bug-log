@@ -9,6 +9,7 @@
     </form>
     <div v-for="bug in bugs" :key="bug.id" :bug="bug">
       <router-link :to="{name: 'bug', params: {bugId: bug.id}}">{{bug.title}}</router-link>
+      <p>{{bug.description}}</p>
     </div>
   </div>
 </template>
@@ -16,10 +17,10 @@
 <script>
 export default {
   name: "home",
-  // mounted() {
-  //   this.$store.dispatch("getBugs");
-  //   console.log();
-  // },
+  mounted() {
+    this.$store.dispatch("getBugs");
+    console.log();
+  },
   data() {
     return {
       newBug: {

@@ -6,8 +6,8 @@ import ProfileSchema from "../models/Profile";
 
 class DbContext {
   Values = mongoose.model("Value", ValueSchema);
-  // Bugs = mongoose.model("Value", BugSchema);
-  // Notes = mongoose.model("Value", NoteSchema);
+  Bugs = mongoose.model("Bug", BugSchema);
+  Notes = mongoose.model("Note", NoteSchema);
   Profile = mongoose.model("Profile", ProfileSchema);
 }
 

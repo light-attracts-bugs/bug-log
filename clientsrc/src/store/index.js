@@ -64,11 +64,15 @@ export default new Vuex.Store({
 
     //#region -- BUGS --
     async getBugs({ commit, dispatch }) {
-      let res = await api.get("bugs");
-      commit("setBugs", res.data);
+      try {
+        let res = await api.get("bugs");
+        commit("setBugs", res.data);
+      } catch (error) {
+        console.error(error);
+      }
     },
     async addBug({ commit, dispatch }, bugData) {
-      let res = await api.post("bugss", bugData);
+      let res = await api.post("bugs", bugData);
       dispatch("getBugs");
     },
     async getActiveBug({ commit, dispatch }, bug) {
@@ -121,4 +125,4 @@ export default new Vuex.Store({
     },
     //#endregion
   }
-  });
+});
