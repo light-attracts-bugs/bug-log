@@ -11,6 +11,8 @@ export default {
   name: "Profile",
   computed: {
     profile() {
+      console.log("$store.state.profile in Profile.vue")
+      console.log(this.$store.state.profile)
       return this.$store.state.profile;
     }
   }
