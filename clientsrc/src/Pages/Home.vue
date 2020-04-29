@@ -8,8 +8,16 @@
       <button type="submit">Create Bug</button>
     </form>
     <div v-for="bug in bugs" :key="bug.id" :bug="bug">
+      <template v-if="bug.closed == true">
+      <router-link :to="{name: 'bug', params: {bugId: bug.id}}"><del>{{bug.title}}</del></router-link>
+      <p><del>{{bug.description}}</del></p>
+      <p><del>{{bug.updatedAt}}</del></p>
+      </template>
+      <template v-else>
       <router-link :to="{name: 'bug', params: {bugId: bug.id}}">{{bug.title}}</router-link>
       <p>{{bug.description}}</p>
+      <p>{{bug.updatedAt}}</p>
+      </template>
     </div>
   </div>
 </template>
@@ -20,6 +28,7 @@ export default {
   mounted() {
     this.$store.dispatch("getBugs");
     console.log();
+    
   },
   data() {
     return {
@@ -37,8 +46,13 @@ export default {
     methods: {
     addBug() {
       this.$store.dispatch("addBug", this.newBug);
+      // console.log(newBug)
       this.newBug = { title: "", description: "" };
     }
   }
 };
 </script>
+
+<style scoped>
+
+</style>

@@ -85,7 +85,7 @@ export default new Vuex.Store({
     },
     async editBug({ commit, dispatch }, bug) {
       try {
-        await api.put("boards/" + bug.id, bug);
+        await api.put("bugs/" + bug.id, bug);
       } catch (error) {
         console.error(error);
       }
@@ -97,28 +97,49 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
+    async getBug({ commit, dispatch }, bugId) {
+      try {
+        let res = await api.get("bugs/" + bugId)
+        commit("setActiveBug", res.data)
+      } catch (error) {
+        console.error(error);
+      }
+    },
     //#endregion
 
     //#region -- NOTES --
     async getNotesByBugId({ commit, dispatch }, bugId) {
       try {
         let res = await api.get("bugs/" + bugId + "/notes");
-        commit("setTasks", { bugId, tasks: res.data });
+        commit("setNotes", { bugId, bugs: res.data });
       } catch (err) {
         console.error(err);
       }
     },
+    // async addNote({ commit, dispatch }, newNote) {
+    //   try {
+    //     let res = await api.post("notes/", newNote);
+    //     dispatch("getBugs", newNote.bugId);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // },
     async addNote({ commit, dispatch }, newNote) {
       try {
-        let res = await api.post("bugs/", newNote);
-        dispatch("getTasks", newNote.bugId);
+        // let res = await api.post("bugs/" + newNote.bugId +"/notes/", newNote)
+        let res = await api.post("/notes/", newNote)
+        dispatch("getBug", newNote.bugId)
+        dispatch("getNotesByBugId", newNote.bugId)
       } catch (error) {
         console.error(error);
       }
     },
-    async deleteNote({ commit, dispatch }, noteId) {
+
+    async deleteNote({ commit, dispatch }, noteData) {
       try {
-        await api.delete("notes/" + noteId);
+        let res = await api.delete("notes/" + noteData.id)
+        dispatch("getBug", noteData.bugId)
+        dispatch("getNotesByBugId", noteData.bugId)
       } catch (error) {
         console.error(error);
       }

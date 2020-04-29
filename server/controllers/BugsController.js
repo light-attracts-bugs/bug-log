@@ -15,7 +15,7 @@ export class BugsController extends BaseController {
       .get("/:id/notes", this.getNotesByBugId)
       .post("", this.create)
       .put("/:id", this.edit)
-      .delete("/:id", this.delete);
+      // .delete("/:id", this.delete);
   }
   async getAll(req, res, next) {
     try {

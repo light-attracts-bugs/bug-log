@@ -9,15 +9,12 @@ class NotesService {
     );
   }
 
-  async getNotesByBugId(id, userEmail) {
-    let data = await dbContext.Notes.find({
-      bugId: id,
-      creatorEmail: userEmail,
-    });
+  async getNotesByBugId(bugId, userEmail) {
+    let data = await dbContext.Notes.find({ bugId: bugId, creatorEmail: userEmail })
     if (!data) {
-      throw new BadRequest("Invalid ID or you do not own this comment");
+      throw new BadRequest("Invalid BugBoard or you do not own this note")
     }
-    return data;
+    return data
   }
 
   async create(rawData) {
@@ -25,14 +22,11 @@ class NotesService {
     return data;
   }
 
-  async edit(id, userEmail, update) {
-    let data = await dbContext.Notes.findOneAndUpdate(
-      { _id: id, creatorEmail: userEmail },
-      update,
-      { new: true }
-    );
+  async edit(bugId, userEmail, update) {
+    let data = await dbContext.Notes.findOneAndUpdate({ _id: bugId, creatorEmail: userEmail },
+      update, { new: true })
     if (!data) {
-      throw new BadRequest("Invalid ID or you do not own this comment");
+      throw new BadRequest("Invalid ID or you do not own this note");
     }
     return data;
   }
@@ -43,7 +37,7 @@ class NotesService {
       creatorEmail: userEmail,
     });
     if (!data) {
-      throw new BadRequest("Invalid ID or you do not own this comment");
+      throw new BadRequest("Invalid ID or you do not own this note");
     }
   }
 }

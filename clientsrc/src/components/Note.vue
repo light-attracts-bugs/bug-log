@@ -6,15 +6,17 @@
           <!-- <button type="submit">
             <i class="fas fa-pencil-alt text-warning"></i>
           </button>-->
-          <button class="btn btn-sm" @click="deleteNote()">
+          <p>{{noteData.content}}</p>
+          <p>{{profile.name}}</p>
+          <button class="btn btn-sm" @click="deleteNote()" v-if="bug.closed == false">
             <i class="fas fa-trash-alt text-danger"></i>
           </button>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
-          <p>"{{noteData.body}}"</p>
-          <p class="text-right">-{{noteData.creatorName}}</p>
+          <!-- <p>"{{noteData.body}}"</p> -->
+          <!-- <p class="text-right">-{{noteData.creatorName}}</p> -->
         </div>
       </div>
     </div>
@@ -29,12 +31,20 @@ export default {
     return {};
   },
   props: ["noteData"],
-  computed: {},
+  computed: {
+    profile() {
+      return this.$store.state.profile;
+    },
+    bug() {
+      return this.$store.state.activeBug;
+    }
+  },
   methods: {
     deleteNote() {
-      this.$store.dispatch("deleteNote", this.noteData);
-      //this.$store.dispatch("getComments", this.comment.taskId);
-      this.$store.dispatch("getComments", this.noteData.bugId);
+      if (confirm("are you sure you want to delete this note?")) {
+        this.$store.dispatch("deleteNote", this.noteData);
+        // this.$store.dispatch("getNotes", this.noteData.bugId);
+      }
     }
   },
   components: {}

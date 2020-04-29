@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
+let ObjectId = Schema.Types.ObjectId
 
 
 const Bug = new Schema ({
@@ -9,5 +10,13 @@ const Bug = new Schema ({
   closedDate: { type: Date},
   creatorEmail: { type: String, required: true }
 }, { timestamps: true, toJSON: { virtuals: true } })
+
+Bug.virtual("creator",
+  {
+    localField: "creatorEmail",
+    ref: "Profile",
+    foreignField: "email",
+    justOne: true
+  })
 
 export default Bug

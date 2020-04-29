@@ -5,7 +5,7 @@ import Home from "../Pages/Home.vue";
 // @ts-ignore
 import Profile from "../Pages/Profile.vue";
 import { authGuard } from "@bcwdev/auth0-vue";
-import Bug from "../../../server/models/Bug";
+import Bug from "../Pages/Bug.vue";
 
 Vue.use(VueRouter);
 
@@ -23,10 +23,10 @@ const routes = [
     beforeEnter: authGuard,
   },
   {
-    path: "/bug/:bugId",
+    path: "/bugs/:bugId",
     name: "bug",
     component: Bug,
-    beforeEnter: authGuard,
+    beforeEnter: authGuard
   },
   {
     path: "*",

@@ -1,13 +1,12 @@
 <template>
-  <div class="board bg-secondary container-fluid">
+  <div class="bug bg-secondary container-fluid">
+    <p>"{{bug.description}}"</p>
     <div class="row justify-content-around">
-      <!-- <h1 v-if="board.title">{{board.title}}</h1>
-      <h1 v-else>Loading...</h1>-->
-      <list v-for="note in notes" :key="note.id" :noteData="note"></list>
+      <note v-for="note in notes" :noteData="note" :key="note._id"></note>
     </div>
     <div class="row mt-5">
       <div class="col-12 pb-5">
-        <form @submit.prevent="addList">
+        <form @submit.prevent="addNote">
           <input type="text" placeholder="title" v-model="newNote.title" required />
           <button type="submit">Create Note</button>
         </form>
@@ -17,10 +16,9 @@
 </template>
 
 <script>
-import note from "../components/Note";
+import Note from "../components/Note";
 export default {
   name: "bug",
-  props: ["bug"],
   data() {
     return {
       newNote: {}
@@ -32,23 +30,42 @@ export default {
     },
     bug() {
       //FIXME This does not work on page reload because the activeBug is empty in the store
-      return this.$store.state.activeBoard;
+      return this.$store.state.activeBug;
+    },
+    profile() {
+      return this.$store.state.profile;
     }
   },
 
   methods: {
     addNote() {
-      this.newNote.bugId = this.$route.params.bugdId;
-      console.log("this.newNote in Bug.vue")
+      // this.$store.dispatch("addBug", this.newBug);
+      // this.newBug = { title: "", description: "" };
+      this.newNote.bugId = this.$route.params.bugId;
+      this.newNote.creatorEmail = this.bug.creatorEmail;
+      console.log("this.newNote in Bug.vue");
       console.log(this.newNote);
       this.$store.dispatch("addNote", this.newNote);
-      this.newList = {};
+      this.newNote = {};
+    },
+    editBug() {
+      this.$store.dispatch("editBug", this.bug);
+      this.editing = false;
+      this.edit = false;
+    },
+    closeBug() {
+      if (confirm("confirm close bug")) {
+        this.bug.closed = true;
+        this.$store.dispatch("editBug", this.bug);
+      }
     }
   },
   mounted() {
-    this.$store.dispatch("getNotes", this.$route.params.bugId);
+    this.$store.dispatch("getNotesByBugId", this.$route.params.bugId);
+    this.$store.dispatch("getActiveBug", this.$route.params.bugId);
+    this.$store.dispatch("getProfile");
   },
-  props: ["bugId"],
-  components: { note }
+  props: ["bugData"],
+  components: { Note }
 };
 </script>
